@@ -1,17 +1,39 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FirebaseController;
+
+
+Route::post('/firebase-test', [FirebaseController::class, 'test'])->name('firebase.test');
+
+
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('dashboard');
+})->name('dashboard');
 
-Route::get('producto/index', [ProductoController::class, 'index']);
-Route::get('producto/create', [ProductoController::class, 'create']);
-Route::get('producto/pago', [ProductoController::class, 'pago'])->name('producto.pago');
-Route::post('producto/create', [ProductoController::class, 'store']);
-Route::get('producto/edit/{id}', [ProductoController::class, 'edit']);
-Route::post('producto/update/{id}', [ProductoController::class, 'update']);
-Route::post('producto/destroy/{id}', [ProductoController::class, 'destroy']);
+//Route::middleware('auth')->group(function () {
+//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//});
 
+
+Route::get('/option1', function () {
+    return view('dashboard', ['content' => 'Contenido de la Opción 1']);
+})->name('dashboard.option1');
+
+Route::get('/dashboard/option2', function () {
+    return view('dashboard', ['content' => 'Contenido de la Opción 2']);
+})->name('dashboard.option2');
+
+Route::get('/dashboard/option3', function () {
+    return view('dashboard', ['content' => 'Contenido de la Opción 3']);
+})->name('dashboard.option3');
+
+
+//require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';
+require __DIR__.'/producto.php';

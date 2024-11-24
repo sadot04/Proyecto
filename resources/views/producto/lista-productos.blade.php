@@ -1,4 +1,4 @@
-@extends('layouts.default')
+
 @section('content')
 
 <h1>Lista de productos</h1>
