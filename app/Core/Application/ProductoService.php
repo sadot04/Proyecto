@@ -17,58 +17,60 @@ class ProductoService
         return $this->productoRepository->search($filtro);
     }
 
-    public function nuevoProducto(array $data)
+    public function nuevoProducto(array $data): Producto
     {
-        //genera el id del producto
+        // Genera el ID del producto
         $productoId = $this->productoRepository->nextIdentity();
 
-        //crea el objeto producto
+        // Crea el objeto producto con los datos proporcionados
         $producto = new Producto(
             $productoId,
-            $data['codigo'],
             $data['nombre'],
+            $data['marca'],
             floatval($data['precio']),
+            intval($data['talla']),
+            $data['color'],
+            intval($data['stock'])
         );
 
-        // almacena el producto
+        // Almacena el producto en el repositorio
         $this->productoRepository->store($producto);
 
-        // devuelve el producto creado
+        // Devuelve el producto creado
         return $producto;
     }
 
-    public function modificarProducto(int $id, $data)
+    public function modificarProducto(int $id, array $data): void
     {
-        // aquí se puede hacer validaciones de acuerdo a las reglas de la aplicación
-
-        //carga el producto almancenado
+        // Carga el producto almacenado
         $producto = $this->getProducto($id);
 
         if ($producto === false) {
             throw new Exception("Producto no encontrado");
         }
 
-        //aplica los cambios
-        $producto->setCodigo($data['codigo']);
+        // Aplica los cambios al producto
         $producto->setNombre($data['nombre']);
+        $producto->setMarca($data['marca']);
         $producto->setPrecio(floatval($data['precio']));
+        $producto->setTalla(intval($data['talla']));
+        $producto->setColor($data['color']);
+        $producto->setStock(intval($data['stock']));
 
-        //vuelve a almacenar
+        // Almacena nuevamente el producto actualizado
         $this->productoRepository->store($producto);
     }
 
-    public function eliminarProducto(int $id)
+    public function eliminarProducto(int $id): void
     {
-        // aquí se puede hacer validaciones de acuerdo a las reglas de la aplicación
-
-        //carga el producto almancenado
+        // Carga el producto almacenado
         $producto = $this->getProducto($id);
 
         if ($producto === false) {
             throw new Exception("Producto no encontrado");
         }
 
-        //elimina del repositorio
+        // Elimina el producto del repositorio
         $this->productoRepository->remove($producto->getId());
     }
 

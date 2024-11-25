@@ -3,10 +3,8 @@
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FirebaseController;
 
 
-Route::post('/firebase-test', [FirebaseController::class, 'test'])->name('firebase.test');
 
 
 
@@ -32,6 +30,7 @@ Route::get('/dashboard/option2', function () {
 Route::get('/dashboard/option3', function () {
     return view('dashboard', ['content' => 'Contenido de la Opción 3']);
 })->name('dashboard.option3');
+
 
 
 //require __DIR__.'/auth.php';

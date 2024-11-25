@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Core\Application\ProductoService;
+use App\Infraestructura\ProductoRepositoryFb;
 
 class ProductoController extends Controller
 {
@@ -11,12 +13,9 @@ class ProductoController extends Controller
 
     public function __construct()
     {
-        // la instancia del servicio se crea manualmente, pero
-        // se puede obtener mediante el inyector de dependencias
-        // se le pasa por parámetro una clase que implementa la interfaz ProductoRepository
-        // Aquí es donde se hace la inyección de dependencias
+        // Se pasa la implementación de ProductoRepositoryFb al servicio
         $this->productoService = new ProductoService(
-            new \App\Infraestructura\ProductoRepositoryImpl()
+            new ProductoRepositoryFb()
         );
     }
 
@@ -25,27 +24,12 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
-        // obtiene el valor del filtro enviado por la vista, si no hay filtro = ''
         $filtro = $request->input('filtro') ?: '';
+        $productos = $this->productoService->searchProducto($filtro);
 
-        // Define una lista de productos estáticos en lugar de obtenerlos de la base de datos
-        $productos = collect([
-            (object) ['id' => 1, 'codigo' => 'P001', 'nombre' => 'Producto 1', 'precio' => 10.0],
-            (object) ['id' => 2, 'codigo' => 'P002', 'nombre' => 'Producto 2', 'precio' => 15.0],
-            (object) ['id' => 3, 'codigo' => 'P003', 'nombre' => 'Producto 3', 'precio' => 20.0],
-            (object) ['id' => 4, 'codigo' => 'P004', 'nombre' => 'Producto 4', 'precio' => 25.0],
-            (object) ['id' => 5, 'codigo' => 'P005', 'nombre' => 'Producto 5', 'precio' => 30.0],
-            (object) ['id' => 6, 'codigo' => 'P006', 'nombre' => 'Producto 6', 'precio' => 35.0],
-            (object) ['id' => 7, 'codigo' => 'P007', 'nombre' => 'Producto 7', 'precio' => 40.0],
-            (object) ['id' => 8, 'codigo' => 'P008', 'nombre' => 'Producto 8', 'precio' => 45.0],
-            (object) ['id' => 9, 'codigo' => 'P009', 'nombre' => 'Producto 9', 'precio' => 50.0],
-            (object) ['id' => 10, 'codigo' => 'P010', 'nombre' => 'Producto 10', 'precio' => 55.0],
-        ]);
-
-        // Pasa los productos estáticos a la vista
         return view('producto.lista-productos', [
             'productos' => $productos,
-            'filtro' => $filtro,  // pasa el valor del filtro a la vista para que lo muestre
+            'filtro' => $filtro,
         ]);
     }
 
@@ -57,25 +41,26 @@ class ProductoController extends Controller
         return view('producto.nuevo-producto');
     }
 
-    public function pago()
-    {
-        return view('producto.pago-producto');
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        
+        
+        // Validación de los nuevos campos
         $validatedData = $request->validate([
-            'codigo' => ['required', 'max:20'],
             'nombre' => ['required'],
+            'marca' => ['required'],
             'precio' => ['required', 'numeric'],
+            'talla' => ['required', 'numeric'],
+            'color' => ['required'],
+            'stock' => ['required', 'numeric'],
         ]);
 
         $this->productoService->nuevoProducto($validatedData);
 
-        return redirect('producto/index');
+        return redirect('/');
     }
 
     /**
@@ -91,10 +76,10 @@ class ProductoController extends Controller
      */
     public function edit(Request $request, string $id)
     {
-        // recupera el producto
+        // Recupera el producto por ID
         $producto = $this->productoService->getProducto($id);
 
-        // si el producto no existe, vuelve atrás mostrando un error
+        // Verifica si el producto existe
         if (!$producto) {
             return redirect()->back()->withErrors('El producto no existe');
         }
@@ -109,12 +94,18 @@ class ProductoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Validación de los nuevos campos
         $validatedData = $request->validate([
             'codigo' => ['required', 'max:20'],
             'nombre' => ['required'],
+            'marca' => ['required', 'string', 'max:255'],
             'precio' => ['required', 'numeric'],
+            'talla' => ['required', 'integer'],
+            'color' => ['required', 'string', 'max:255'],
+            'stock' => ['required', 'integer'],
         ]);
 
+        // Llama al servicio para actualizar el producto
         $this->productoService->modificarProducto($id, $validatedData);
 
         return redirect('producto/index')->with('success', 'Producto actualizado');
@@ -128,5 +119,11 @@ class ProductoController extends Controller
         $this->productoService->eliminarProducto($id);
 
         return redirect('producto/index')->with('success', 'Producto eliminado');
+    }
+
+    public function getSemana()
+    {
+        $semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        return response()->json($semana);
     }
 }
