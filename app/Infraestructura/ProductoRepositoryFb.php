@@ -60,11 +60,32 @@ class ProductoRepositoryFb implements ProductoRepository
         return true;
     }
 
+
     public function remove(int $productoId): bool
     {
-        //FirebaseConnection::delete("/productos/$productoId");
-        return true;
+        try {
+            // Obtén la instancia de la base de datos
+            $factory = new \Kreait\Firebase\Factory();
+            $database = $factory
+                ->withServiceAccount(base_path('storage/app/firebase_credentials.json'))
+                ->withDatabaseUri('https://tbproyectos-f05e7-default-rtdb.firebaseio.com')
+                ->createDatabase();
+
+            // Elimina el nodo del producto
+            $database->getReference("/productos/$productoId")->remove();
+            return true;
+        } catch (\Throwable $e) {
+            // Loguea el error y retorna false si algo falla
+            // Log::error($e->getMessage());
+            return false;
+        }
     }
+
+
+
+
+
+
 
     public function getById(int $id): Producto|false
     {

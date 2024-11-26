@@ -51,11 +51,11 @@ class ProductoService
 
         // Aplica los cambios al producto
         $producto->setNombre($data['nombre']);
-        $producto->setMarca($data['marca']);
+        //$producto->setMarca($data['marca']);
         $producto->setPrecio(floatval($data['precio']));
-        $producto->setTalla(intval($data['talla']));
-        $producto->setColor($data['color']);
-        $producto->setStock(intval($data['stock']));
+        //$producto->setTalla(intval($data['talla']));
+        //$producto->setColor($data['color']);
+        //$producto->setStock(intval($data['stock']));
 
         // Almacena nuevamente el producto actualizado
         $this->productoRepository->store($producto);

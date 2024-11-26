@@ -15,14 +15,14 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen flex bg-gray-800">
+        <div class="min-h-screen flex dark:bg-gray-900">
             <!-- Barra lateral -->
             <aside class="w-64 bg-gray-700">
                 @include('layouts.leftbar')
             </aside>
 
             <!-- Contenido principal -->
-            <div class="flex-1 flex-col bg-gray-900">
+            <div class="flex-1 flex-col dark:bg-gray-900">
                 <!-- Barra de navegación superior -->
                 @include('layouts.navigation')
 

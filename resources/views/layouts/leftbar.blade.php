@@ -16,10 +16,7 @@
         <nav class="mt-4 flex-1 w-full">
             <ul class="space-y-2">
                 <li>
-                    <a href="#" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate ">Inicio</a>
-                </li>
-                <li>
-                    <a href="#" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Productos</a>
+                    <a href="<?= url('producto/index') ?>" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Productos</a>
                 </li>
                 <li>
                     <a href="#" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Proveedores</a>

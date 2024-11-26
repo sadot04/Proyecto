@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="p-6 dark:bg-gray-900">
+    <div class="p-6 dark:bg-gray-800">
         <h1 class="text-white text-2xl font-bold mb-4">Nuevo Producto</h1>
 
         <form action="{{ url('producto/create') }}" method="post">

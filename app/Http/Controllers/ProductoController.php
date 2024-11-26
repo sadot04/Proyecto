@@ -96,13 +96,12 @@ class ProductoController extends Controller
     {
         // Validación de los nuevos campos
         $validatedData = $request->validate([
-            'codigo' => ['required', 'max:20'],
             'nombre' => ['required'],
-            'marca' => ['required', 'string', 'max:255'],
+            //'marca' => ['required'],
             'precio' => ['required', 'numeric'],
-            'talla' => ['required', 'integer'],
-            'color' => ['required', 'string', 'max:255'],
-            'stock' => ['required', 'integer'],
+            //'talla' => ['required', 'numeric'],
+            //'color' => ['required'],
+            //'stock' => ['required', 'numeric'],
         ]);
 
         // Llama al servicio para actualizar el producto
