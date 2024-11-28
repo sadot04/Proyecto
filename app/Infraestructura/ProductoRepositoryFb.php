@@ -29,9 +29,14 @@ class ProductoRepositoryFb implements ProductoRepository
                 $row['nombre'],
                 $row['marca'],
                 floatval($row['precio']),
-                intval($row['talla']),
+                //intval($row['talla']),
                 $row['color'],
-                intval($row['stock'])
+                intval($row['stock36']),
+                intval($row['stock38']),
+                intval($row['stock40']),
+                intval($row['stock42']),
+                intval($row['stock44']),
+                $row['imagenUrl']
             );
         }
 
@@ -51,14 +56,20 @@ class ProductoRepositoryFb implements ProductoRepository
             'nombre' => $producto->getNombre(),
             'marca' => $producto->getMarca(),
             'precio' => $producto->getPrecio(),
-            'talla' => $producto->getTalla(),
+            //'talla' => $producto->getTalla(),
             'color' => $producto->getColor(),
-            'stock' => $producto->getStock(),
+            'stock36' => $producto->getStock36(),
+            'stock38' => $producto->getStock38(),
+            'stock40' => $producto->getStock40(),
+            'stock42' => $producto->getStock42(),
+            'stock44' => $producto->getStock44(),
+            'imagenUrl' => $producto->getImagenUrl()
         ];
 
         FirebaseConnection::set("/productos/" . $producto->getId(), $data);
         return true;
     }
+
 
 
     public function remove(int $productoId): bool
@@ -100,9 +111,15 @@ class ProductoRepositoryFb implements ProductoRepository
             $data['nombre'],
             $data['marca'],
             floatval($data['precio']),
-            intval($data['talla']),
+            //intval($data['talla']),
             $data['color'],
-            intval($data['stock'])
+            intval($data['stock36']),
+            intval($data['stock38']),
+            intval($data['stock40']),
+            intval($data['stock42']),
+            intval($data['stock44']),
+            $data['imagenUrl']
         );
     }
+
 }

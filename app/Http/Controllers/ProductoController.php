@@ -53,10 +53,16 @@ class ProductoController extends Controller
             'nombre' => ['required'],
             'marca' => ['required'],
             'precio' => ['required', 'numeric'],
-            'talla' => ['required', 'numeric'],
+            //'talla' => ['required', 'numeric'],
             'color' => ['required'],
-            'stock' => ['required', 'numeric'],
+            'stock36' => ['required', 'numeric'],
+            'stock38' => ['required', 'numeric'],
+            'stock40' => ['required', 'numeric'],
+            'stock42' => ['required', 'numeric'],
+            'stock44' => ['required', 'numeric'],
+            'imagenUrl' => ['required']
         ]);
+        
 
         $this->productoService->nuevoProducto($validatedData);
 
@@ -97,12 +103,18 @@ class ProductoController extends Controller
         // Validación de los nuevos campos
         $validatedData = $request->validate([
             'nombre' => ['required'],
-            //'marca' => ['required'],
+            'marca' => ['required'],
             'precio' => ['required', 'numeric'],
             //'talla' => ['required', 'numeric'],
-            //'color' => ['required'],
-            //'stock' => ['required', 'numeric'],
+            'color' => ['required'],
+            'stock36' => ['required', 'numeric'],
+            'stock38' => ['required', 'numeric'],
+            'stock40' => ['required', 'numeric'],
+            'stock42' => ['required', 'numeric'],
+            'stock44' => ['required', 'numeric'],
+            'imagenUrl' => ['required']
         ]);
+        
 
         // Llama al servicio para actualizar el producto
         $this->productoService->modificarProducto($id, $validatedData);
