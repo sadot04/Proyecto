@@ -37,6 +37,7 @@ class PedidoController extends Controller
      */
     public function create()
     {
+        echo("llego al create controler");
         return view('pedido.nuevo-pedido');
     }
 
@@ -46,19 +47,22 @@ class PedidoController extends Controller
     public function store(Request $request)
     {
         // Validación de los campos del pedido
+       // echo("LLegao a store controller");
         $validatedData = $request->validate([
             'estado' => ['required'],
             'total' => ['required', 'numeric'],
             'tipoPago' => ['required'],
             'nroTransaccion' => ['required'],
-            'productos' => ['required'], // Array de productos
-            'productos.nombre' => ['required'],
-            'productos.precio' => ['required', 'numeric'],
+            'productos' => ['required']
         ]);
-
+        //echo("aaaa");
         $this->pedidoService->nuevoPedido($validatedData);
 
-        return redirect('/')->with('success', 'Pedido creado exitosamente');
+        // Enviar respuesta JSON
+        return response()->json([
+            'message' => 'Pedido creado exitosamente',
+            'data' => $validatedData
+        ], 201);
     }
 
     /**
@@ -104,12 +108,13 @@ class PedidoController extends Controller
             'total' => ['required', 'numeric'],
             'tipoPago' => ['required'],
             'nroTransaccion' => ['required'],
-            'productos' => ['required', 'array'], // Array de productos
+            'productos' => ['required'], // Array de productos
         ]);
 
         $this->pedidoService->modificarPedido($id, $validatedData);
 
         return redirect('/pedidos')->with('success', 'Pedido actualizado exitosamente');
+   
     }
 
     /**

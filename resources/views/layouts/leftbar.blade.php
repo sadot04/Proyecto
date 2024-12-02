@@ -19,10 +19,10 @@
                     <a href="<?= url('producto/index') ?>" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Productos</a>
                 </li>
                 <li>
-                    <a href="#" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Proveedores</a>
+                    <a href="<?= url('producto/index2') ?>" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Acciones</a>
                 </li>
                 <li>
-                    <a href="#" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Ventas</a>
+                    <a href="<?= url('producto/create') ?>" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded truncate">Agregar producto</a>
                 </li>
             </ul>
         </nav>

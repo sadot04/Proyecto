@@ -32,6 +32,16 @@ class ProductoController extends Controller
             'filtro' => $filtro,
         ]);
     }
+    public function index2(Request $request)
+    {
+        $filtro = $request->input('filtro') ?: '';
+        $productos = $this->productoService->searchProducto($filtro);
+
+        return view('producto.lista-productos2', [
+            'productos' => $productos,
+            'filtro' => $filtro,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

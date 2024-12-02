@@ -22,7 +22,7 @@ class PedidoService
     public function nuevoPedido(array $data): Pedido
     {
         $pedidoId = $this->pedidoRepository->nextIdentity();
-
+       // echo("aaaa");
         $pedido = new Pedido(
             $pedidoId,
             $data['estado'],

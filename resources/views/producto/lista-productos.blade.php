@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Tienda de Zapatillas</title>
     <style>
         /* Estilos generales */
@@ -151,33 +152,36 @@
     </div>
 
 
-        <div class="detalles-producto" id="detalles-producto">
-            <img id="imagen-detalle" src="" alt="Detalles del Producto">
-            <h2 id="nombre-detalle"></h2>
-            <p id="precio-detalle"></p>
-            <div id="detalles-tallas"></div> <!-- Contenedor de tallas -->
-            <div>
-                <button class="boton" onclick="comprarAhora()">Comprar Ahora</button>
-                <button class="boton boton-secundario" onclick="añadirAlCarrito(productoActual.nombre, productoActual.precio)">Agregar al Carrito</button>
-                <button class="boton" onclick="volverAlCatalogo()">Volver</button>
-            </div>
+    <div class="detalles-producto" id="detalles-producto">
+        <img id="imagen-detalle" src="" alt="Detalles del Producto">
+        <h2 id="nombre-detalle"></h2>
+        <p id="precio-detalle"></p>
+        <p id="descripcion-detalle"></p> <!-- Descripción del producto -->
+        <div id="detalles-tallas"></div> <!-- Contenedor de tallas -->
+        <div>
+            <button class="boton" onclick="comprarAhora()">Comprar Ahora</button>
+            <button class="boton" onclick="volverAlCatalogo()">Volver</button>
         </div>
+    </div>
 
-        <div class="pantalla-compra" id="pantalla-compra">
-            <h2>Finalizar Compra</h2>
-            <div class="metodos-pago">
-                <button class="boton" onclick="pagarTarjeta()">Pagar con Tarjeta</button>
-                <button class="boton boton-secundario" onclick="pagarQR()">Pagar con QR</button>
-            </div>
-            <button class="boton" onclick="volverAlDetalles()">Volver</button>
-        </div>
+    <div class="pantalla-compra" id="pantalla-compra">
+    <h2>Finalizar Compra</h2>
+    <div id="resumen-compra">
+        <img id="compra-imagen" src="" alt="Producto Seleccionado" style="max-width: 200px; height: auto;">
+        <h3 id="compra-nombre">Nombre del Producto</h3>
+        <p id="compra-precio">Precio: Bs 0.00</p>
+        <p id="compra-talla">Talla: 40</p>
+        <p id="compra-cantidad">Cantidad: 1</p>
+    </div>
+    <div class="metodos-pago">
+        <button class="boton" onclick="pagarTarjeta()">Pagar con Tarjeta</button>
+        <button class="boton boton-secundario" onclick="pagarQR()">Pagar con QR</button>
+    </div>
+    <button class="boton" onclick="volverAlDetalles()">Volver</button>
+</div>
 
-        <div class="carrito">
-            <h2>Carrito de Compras</h2>
-            <ul id="lista-carrito"></ul>
-            <p>Total: Bs <span id="total-carrito">0.00</span></p>
-            <button onclick="procesarCompra()" class="boton">Procesar Compra</button>
-        </div>
+
+        
     </div>
 
     <footer>
@@ -190,7 +194,7 @@
     let total = 0;
     let productoActual = null;
 
-    function mostrarDetalles(nombre, precio, imagen, stock36, stock38, stock40, stock42, stock44) {
+    function mostrarDetalles(nombre, precio, imagen, stock36, stock38, stock40, stock42, stock44, descripcion) {
         document.getElementById('catalogo').style.display = 'none';
         const detallesProducto = document.getElementById('detalles-producto');
         detallesProducto.style.display = 'flex';
@@ -198,6 +202,7 @@
         document.getElementById('imagen-detalle').src = imagen;
         document.getElementById('nombre-detalle').textContent = nombre;
         document.getElementById('precio-detalle').textContent = "Bs. "+precio;
+        document.getElementById('descripcion-detalle').textContent = descripcion; // Mostrar la descripción
 
         // Mostrar las tallas disponibles
         const tallas = [36, 38, 40, 42, 44];
@@ -227,6 +232,7 @@
         productoActual = { nombre, precio, imagen };
     }
 
+
     function seleccionarTalla(talla) {
         console.log(`Talla seleccionada: ${talla}`);
         // Aquí puedes agregar la lógica para procesar la selección de la talla
@@ -241,9 +247,23 @@
     }
 
     function comprarAhora() {
-        document.getElementById('detalles-producto').style.display = 'none';
-        document.getElementById('pantalla-compra').style.display = 'flex';
+    if (!productoActual) {
+        alert("No se ha seleccionado ningún producto");
+        return;
     }
+
+    // Actualizar los datos de la compra
+    document.getElementById('compra-imagen').src = productoActual.imagen;
+    document.getElementById('compra-nombre').textContent = productoActual.nombre;
+    document.getElementById('compra-precio').textContent = `Precio: Bs ${productoActual.precio}`;
+    document.getElementById('compra-talla').textContent = "Talla: 42";
+    document.getElementById('compra-cantidad').textContent = "Cantidad: 1";
+
+    // Cambiar de vista
+    document.getElementById('detalles-producto').style.display = 'none';
+    document.getElementById('pantalla-compra').style.display = 'flex';
+}
+
 
     function volverAlDetalles() {
         document.getElementById('detalles-producto').style.display = 'flex';
@@ -256,7 +276,10 @@
 
     function pagarQR() {
         enviarPedido("QR");
+        console.log("when eres el qr");
     }
+    
+    
 
     function enviarPedido(metodoPago) {
         if (!productoActual) {
@@ -266,49 +289,48 @@
 
         // Información del pedido
         console.log(productoActual.precio);
-        
+        console.log("estoy aca");
         const pedido = {
-            estado: "pagado",
+            estado: "no pagado",
             nroTransaccion: "555555",
             total: productoActual.precio,
             tipoPago: metodoPago,
-            productos: [
-                {
-                    nombre: productoActual.nombre,
-                    precio: productoActual.precio,
-                },
-            ],
+            productos: "zapatillasPruebas10"
+              
         };
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Enviar solicitud POST al servidor
-        fetch('/pedido/create', {
-            method: 'POST',
-            body: JSON.stringify(pedido),
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Error al guardar el pedido');
-                }
-            })
-            .then(data => {
-                alert('Pedido guardado exitosamente');
-                console.log(data);
-                volverAlCatalogo(); // Volver al catálogo después de guardar el pedido
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Hubo un problema al procesar el pedido');
-            });
-    }
+//fetch('http://127.0.0.1:8000/pedido/create', {
+fetch('/pedido/create', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken, // Asegúrate de incluir este encabezado
+    },
+    body: JSON.stringify(pedido)
+})
+    .then(response => {
+        console.log(response.status);  // Revisa el estado de la respuesta (200, 404, etc.)
+        return response.json();       // Asegúrate de que la respuesta sea JSON
+    })
+    .then(data => {
+        console.log(data);
+        alert('Pedido creado exitosamente');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar el pedido');
+    });
 
+        }
 
+    
 
     function añadirAlCarrito(nombre, precio) {
         carrito.push({ nombre, precio });
         total += precio;
         actualizarCarrito();
+        console.log(nombre,precio);
     }
 
     function actualizarCarrito() {

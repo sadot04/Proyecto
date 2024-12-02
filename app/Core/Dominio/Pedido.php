@@ -9,7 +9,7 @@ class Pedido
     private float $total;
     private string $tipoPago;
     private string $nroTransaccion; // Nuevo atributo
-    private array $productos; // Array de productos
+    private string $productos; // Array de productos
 
     public function __construct(
         int $id,
@@ -17,7 +17,7 @@ class Pedido
         float $total,
         string $tipoPago,
         string $nroTransaccion,
-        array $productos // Recibe un array de productos
+        string $productos // Recibe un array de productos
     ) {
         $this->id = $id;
         $this->estado = $estado;
@@ -53,7 +53,7 @@ class Pedido
         return $this->nroTransaccion;
     }
 
-    public function getProductos(): array
+    public function getProductos(): string
     {
         return $this->productos;
     }
@@ -79,24 +79,9 @@ class Pedido
         $this->nroTransaccion = $nroTransaccion;
     }
 
-    public function setProductos(array $productos): void
+    public function setProductos(string $productos): void
     {
         $this->productos = $productos;
     }
 
-    // Métodos para trabajar con productos
-    public function agregarProducto(int $id, array $producto): void
-    {
-        $this->productos[$id] = $producto;
-    }
-
-    public function eliminarProducto(int $id): void
-    {
-        unset($this->productos[$id]);
-    }
-
-    public function obtenerProducto(int $id): ?array
-    {
-        return $this->productos[$id] ?? null;
-    }
 }
